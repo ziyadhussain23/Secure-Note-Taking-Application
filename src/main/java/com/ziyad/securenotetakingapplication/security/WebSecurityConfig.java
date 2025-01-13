@@ -75,12 +75,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/note/auth/**").permitAll()
                                 .requestMatchers("/v3/api-docs/**").permitAll()
-                                .requestMatchers("/note/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/note/editor/**").hasRole("ADMIN")
-                                .requestMatchers("/note/editor/**").hasRole("EDITOR")
-                                .requestMatchers("/note/viewer/**").hasRole("VIEWER")
-                                .requestMatchers("/note/viewer/**").hasRole("ADMIN")
-                                .requestMatchers("/note/viewer/**").hasRole("EDITOR")
+                                .requestMatchers("/note/folder/**").permitAll()
                                 .requestMatchers("/swagger-ui/**").permitAll()
                                 //.requestMatchers("/api/test/**").permitAll()
                                 //.requestMatchers("/images/**").permitAll()

@@ -96,7 +96,7 @@ public class AuthController {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         }
-        // Create new user's account
+
         User user = new User(signUpRequest.getUsername(),
                 passwordEncoder.encode(signUpRequest.getPassword()),
                 signUpRequest.getEmail(), signUpRequest.getFirstName(), signUpRequest.getLastName());
