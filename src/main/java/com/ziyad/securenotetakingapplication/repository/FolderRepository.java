@@ -17,4 +17,8 @@ public interface FolderRepository extends JpaRepository<Folder, Long> {
     Boolean existsByUserAndFolderName(User user, String folderName);
 
     Folder findByUserAndFolderName(User user, String folderName);
+
+    Boolean existsByUserAndParentFolderAndFolderName(User user, Folder parentFolder, String folderName);
+
+    void deleteFolderByParentFolder(Folder parentFolder);
 }

@@ -6,12 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"folder_name", "user"})
+        @UniqueConstraint(columnNames = {"folder_name", "parent_folder_id"})
 })
 public class Folder {
     @Id
@@ -36,4 +38,7 @@ public class Folder {
     @ManyToOne
     @JoinColumn(name = "parent_folder_id")
     private Folder parentFolder;
+    
+    @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Note> notes = new ArrayList<>();
 }

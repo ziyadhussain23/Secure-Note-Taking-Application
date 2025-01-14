@@ -8,6 +8,8 @@ import com.ziyad.securenotetakingapplication.model.User;
 import com.ziyad.securenotetakingapplication.payload.FolderDTO;
 import com.ziyad.securenotetakingapplication.payload.FolderResponse;
 import com.ziyad.securenotetakingapplication.repository.FolderRepository;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,21 +21,17 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+@AllArgsConstructor
 @Service
 public class FolderServiceImpl implements FolderService {
 
     private final FolderRepository folderRepository;
     private final ModelMapper modelMapper;
 
-    public FolderServiceImpl(FolderRepository folderRepository, ModelMapper modelMapper) {
-        this.folderRepository = folderRepository;
-        this.modelMapper = modelMapper;
-    }
-
-
     @Override
+    @Transactional
     public FolderDTO createFolder(User user, FolderDTO folderDTO) {
-        if(folderRepository.existsByUserAndFolderName(user, folderDTO.getFolderName())){
+        if(folderRepository.existsByUserAndParentFolderAndFolderName(user, folderRepository.findByUserAndFolderName(user, folderDTO.getParentFolderName()), folderDTO.getFolderName())){
             throw new APIException("Folder with this name already exists!");
         }
         Folder folder = new Folder();
@@ -59,11 +57,11 @@ public class FolderServiceImpl implements FolderService {
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
         Page<Folder> folderPage = folderRepository.findAllByUser(user, pageable);
-        if(pageNumber >= folderPage.getTotalPages()){
-            throw new APIException("Page number exceeds total pages!");
-        }
         if(folderPage.isEmpty()){
             throw new APIException("No folders created till now.");
+        }
+        if(pageNumber >= folderPage.getTotalPages()){
+            throw new APIException("Page number exceeds total pages!");
         }
         List<Folder> folders = folderPage.getContent();
         FolderResponse folderResponse = new FolderResponse();
@@ -79,10 +77,14 @@ public class FolderServiceImpl implements FolderService {
 
     @Override
     public FolderDTO updateFolder(User user, FolderDTO folderDTO, String folderName) {
-        if(folderRepository.existsByUserAndFolderName(user, folderDTO.getFolderName())){
+        if(folderRepository.existsByUserAndParentFolderAndFolderName(user,
+                folderRepository.findByUserAndFolderName(user, folderDTO.getParentFolderName()),
+                folderDTO.getFolderName())){
             throw new APIException("Folder with this name already exists!");
         }
-        if(!folderRepository.existsByUserAndFolderName(user, folderName)){
+        if(!folderRepository.existsByUserAndParentFolderAndFolderName(user,
+                folderRepository.findByUserAndFolderName(user, folderDTO.getParentFolderName()),
+                folderDTO.getFolderName())){
             throw new ResourceNotFoundException("Folder", "folderName", folderName);
         }
         Folder folder = folderRepository.findByUserAndFolderName(user, folderName);
@@ -93,11 +95,13 @@ public class FolderServiceImpl implements FolderService {
     }
 
     @Override
+    @Transactional
     public FolderDTO deleteFolder(User user, String folderName) {
         if(!folderRepository.existsByUserAndFolderName(user, folderName)){
             throw new ResourceNotFoundException("Folder", "folderName", folderName);
         }
         Folder folder = folderRepository.findByUserAndFolderName(user, folderName);
+        folderRepository.deleteFolderByParentFolder(folder);
         folderRepository.delete(folder);
         return modelMapper.map(folder, FolderDTO.class);
     }
@@ -122,12 +126,10 @@ public class FolderServiceImpl implements FolderService {
                 parentFolder.setUser(user);
                 parentFolder.setFolderName(folderDTO.getParentFolderName());
                 parentFolder.setCreatedAt(LocalDateTime.now());
-                folderRepository.save(parentFolder);
             }
             parentFolder.setUpdatedAt(LocalDateTime.now());
             folder.setParentFolder(parentFolder);
+            folderRepository.save(parentFolder);
         }
     }
-
-
 }
