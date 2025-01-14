@@ -18,4 +18,6 @@ public class FolderDTO {
     private String folderName;
 
     private LocalDateTime updatedAt;
+
+    private String parentFolderName;
 }

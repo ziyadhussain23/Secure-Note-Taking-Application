@@ -41,6 +41,7 @@ public class FolderServiceImpl implements FolderService {
         folder.setFolderName(folderDTO.getFolderName());
         folder.setCreatedAt(LocalDateTime.now());
         folder.setUpdatedAt(LocalDateTime.now());
+        parentFolder(user, folderDTO, folder);
         folderRepository.save(folder);
         return modelMapper.map(folder, FolderDTO.class);
     }
@@ -99,6 +100,33 @@ public class FolderServiceImpl implements FolderService {
         Folder folder = folderRepository.findByUserAndFolderName(user, folderName);
         folderRepository.delete(folder);
         return modelMapper.map(folder, FolderDTO.class);
+    }
+
+    @Override
+    public FolderDTO moveFolder(User user, FolderDTO folderDTO, String folderName) {
+        if(!folderRepository.existsByUserAndFolderName(user, folderName)){
+            throw new ResourceNotFoundException("Folder", "folderName", folderName);
+        }
+        Folder folder = folderRepository.findByUserAndFolderName(user, folderName);
+        parentFolder(user, folderDTO, folder);
+        folder.setUpdatedAt(LocalDateTime.now());
+        folderRepository.save(folder);
+        return modelMapper.map(folder, FolderDTO.class);
+    }
+
+    private void parentFolder(User user, FolderDTO folderDTO, Folder folder) {
+        if(folderDTO.getParentFolderName() != null){
+            Folder parentFolder = folderRepository.findByUserAndFolderName(user, folderDTO.getParentFolderName());
+            if(parentFolder == null){
+                parentFolder = new Folder();
+                parentFolder.setUser(user);
+                parentFolder.setFolderName(folderDTO.getParentFolderName());
+                parentFolder.setCreatedAt(LocalDateTime.now());
+                folderRepository.save(parentFolder);
+            }
+            parentFolder.setUpdatedAt(LocalDateTime.now());
+            folder.setParentFolder(parentFolder);
+        }
     }
 
 

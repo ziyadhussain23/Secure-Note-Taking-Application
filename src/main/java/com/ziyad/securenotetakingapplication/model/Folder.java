@@ -32,4 +32,8 @@ public class Folder {
     @ManyToOne
     @JoinColumn(name = "user")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_folder_id")
+    private Folder parentFolder;
 }

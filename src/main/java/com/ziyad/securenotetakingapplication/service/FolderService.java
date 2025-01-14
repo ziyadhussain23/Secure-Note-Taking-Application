@@ -3,6 +3,7 @@ package com.ziyad.securenotetakingapplication.service;
 import com.ziyad.securenotetakingapplication.model.User;
 import com.ziyad.securenotetakingapplication.payload.FolderDTO;
 import com.ziyad.securenotetakingapplication.payload.FolderResponse;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 
@@ -18,4 +19,6 @@ public interface FolderService {
     FolderDTO updateFolder(User byUsername, FolderDTO folderDTO, String folderName);
 
     FolderDTO deleteFolder(User user, String folderName);
+
+    FolderDTO moveFolder(User user, @Valid FolderDTO folderDTO, String folderName);
 }
