@@ -14,7 +14,7 @@ import com.ziyad.securenotetakingapplication.security.response.MessageResponse;
 import com.ziyad.securenotetakingapplication.security.response.UserInfoResponse;
 import com.ziyad.securenotetakingapplication.security.services.UserDetailsImpl;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -31,10 +31,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/note/auth")
 public class AuthController {
-
 
     private final JwtUtils jwtUtils;
 
@@ -45,17 +45,6 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
 
     private final RoleRepository roleRepository;
-
-    @Autowired
-    public AuthController(JwtUtils jwtUtils, AuthenticationManager authenticationManager,
-                          UserRepository userRepository, PasswordEncoder passwordEncoder,
-                          RoleRepository roleRepository) {
-        this.jwtUtils = jwtUtils;
-        this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.roleRepository = roleRepository;
-    }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, Authentication authentication) {

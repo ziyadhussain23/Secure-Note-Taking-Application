@@ -8,12 +8,12 @@ import com.ziyad.securenotetakingapplication.payload.FolderResponse;
 import com.ziyad.securenotetakingapplication.repository.UserRepository;
 import com.ziyad.securenotetakingapplication.service.FolderService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-
+@AllArgsConstructor
 @RestController
 @RequestMapping("/note/folder")
 public class FolderController {
@@ -21,11 +21,6 @@ public class FolderController {
     private final FolderService folderService;
 
     private final UserRepository userRepository;
-    @Autowired
-    public FolderController(FolderService folderService, UserRepository userRepository) {
-        this.folderService = folderService;
-        this.userRepository = userRepository;
-    }
 
     @GetMapping("/get")
     public ResponseEntity<FolderResponse> getAllFolder(Authentication authentication,
