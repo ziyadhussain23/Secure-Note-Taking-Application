@@ -1,6 +1,5 @@
 package com.ziyad.securenotetakingapplication.controller;
 
-
 import com.ziyad.securenotetakingapplication.config.AppRole;
 import com.ziyad.securenotetakingapplication.exceptions.APIException;
 import com.ziyad.securenotetakingapplication.model.Role;
@@ -37,13 +36,9 @@ import java.util.stream.Collectors;
 public class AuthController {
 
     private final JwtUtils jwtUtils;
-
     private final AuthenticationManager authenticationManager;
-
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final RoleRepository roleRepository;
 
     @PostMapping("/login")
@@ -66,7 +61,7 @@ public class AuthController {
                 .collect(Collectors.toList());
 
         UserInfoResponse userInfoResponse = new UserInfoResponse(userDetails.getId(),
-                userDetails.getUsername(), roles,userDetails.getEmail(), userDetails.getFirstName(), userDetails.getLastName());
+                userDetails.getUsername(), roles,userDetails.getEmail(), userDetails.getFirstName(), userDetails.getLastName(), jwtCookie.toString());
 
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,
                         jwtCookie.toString())
@@ -129,7 +124,7 @@ public class AuthController {
                     .collect(Collectors.toList());
 
             UserInfoResponse response = new UserInfoResponse(userDetails.getId(),
-                    userDetails.getUsername(), roles, userDetails.getEmail(), userDetails.getFirstName(), userDetails.getLastName());
+                    userDetails.getUsername(), roles, userDetails.getEmail(), userDetails.getFirstName(), userDetails.getLastName(), null);
 
             return ResponseEntity.ok().body(response);
         }else{

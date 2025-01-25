@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class FolderDTO {
 
+    private Long folderId;
+
     @NotBlank
     private String folderName;
 
     private LocalDateTime updatedAt;
-
-    private String parentFolderName;
 }

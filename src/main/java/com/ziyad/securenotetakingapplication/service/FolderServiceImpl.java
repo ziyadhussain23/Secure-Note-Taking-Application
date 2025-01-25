@@ -31,15 +31,15 @@ public class FolderServiceImpl implements FolderService {
     @Override
     @Transactional
     public FolderDTO createFolder(User user, FolderDTO folderDTO) {
-        if(folderRepository.existsByUserAndParentFolderAndFolderName(user, folderRepository.findByUserAndFolderName(user, folderDTO.getParentFolderName()), folderDTO.getFolderName())){
-            throw new APIException("Folder with this name already exists!");
+        if(folderRepository.existsByUserAndFolderName(user, folderDTO.getFolderName())) {
+            throw new APIException("Folder with this name already exists");
         }
         Folder folder = new Folder();
         folder.setUser(user);
         folder.setFolderName(folderDTO.getFolderName());
         folder.setCreatedAt(LocalDateTime.now());
         folder.setUpdatedAt(LocalDateTime.now());
-        parentFolder(user, folderDTO, folder);
+
         folderRepository.save(folder);
         return modelMapper.map(folder, FolderDTO.class);
     }
@@ -76,18 +76,9 @@ public class FolderServiceImpl implements FolderService {
     }
 
     @Override
-    public FolderDTO updateFolder(User user, FolderDTO folderDTO, String folderName) {
-        if(folderRepository.existsByUserAndParentFolderAndFolderName(user,
-                folderRepository.findByUserAndFolderName(user, folderDTO.getParentFolderName()),
-                folderDTO.getFolderName())){
-            throw new APIException("Folder with this name already exists!");
-        }
-        if(!folderRepository.existsByUserAndParentFolderAndFolderName(user,
-                folderRepository.findByUserAndFolderName(user, folderDTO.getParentFolderName()),
-                folderDTO.getFolderName())){
-            throw new ResourceNotFoundException("Folder", "folderName", folderName);
-        }
-        Folder folder = folderRepository.findByUserAndFolderName(user, folderName);
+    public FolderDTO updateFolder(User user, FolderDTO folderDTO, Long folderId) {
+        Folder folder = folderRepository.findByUserAndFolderId(user, folderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Folder", "folderId", folderId));
         folder.setFolderName(folderDTO.getFolderName());
         folder.setUpdatedAt(LocalDateTime.now());
         folderRepository.save(folder);
@@ -96,40 +87,11 @@ public class FolderServiceImpl implements FolderService {
 
     @Override
     @Transactional
-    public FolderDTO deleteFolder(User user, String folderName) {
-        if(!folderRepository.existsByUserAndFolderName(user, folderName)){
-            throw new ResourceNotFoundException("Folder", "folderName", folderName);
-        }
-        Folder folder = folderRepository.findByUserAndFolderName(user, folderName);
-        folderRepository.deleteFolderByParentFolder(folder);
+    public FolderDTO deleteFolder(User user, Long folderId) {
+        Folder folder = folderRepository.findByUserAndFolderId(user, folderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Folder", "folderId", folderId));
         folderRepository.delete(folder);
         return modelMapper.map(folder, FolderDTO.class);
     }
 
-    @Override
-    public FolderDTO moveFolder(User user, FolderDTO folderDTO, String folderName) {
-        if(!folderRepository.existsByUserAndFolderName(user, folderName)){
-            throw new ResourceNotFoundException("Folder", "folderName", folderName);
-        }
-        Folder folder = folderRepository.findByUserAndFolderName(user, folderName);
-        parentFolder(user, folderDTO, folder);
-        folder.setUpdatedAt(LocalDateTime.now());
-        folderRepository.save(folder);
-        return modelMapper.map(folder, FolderDTO.class);
-    }
-
-    private void parentFolder(User user, FolderDTO folderDTO, Folder folder) {
-        if(folderDTO.getParentFolderName() != null){
-            Folder parentFolder = folderRepository.findByUserAndFolderName(user, folderDTO.getParentFolderName());
-            if(parentFolder == null){
-                parentFolder = new Folder();
-                parentFolder.setUser(user);
-                parentFolder.setFolderName(folderDTO.getParentFolderName());
-                parentFolder.setCreatedAt(LocalDateTime.now());
-            }
-            parentFolder.setUpdatedAt(LocalDateTime.now());
-            folder.setParentFolder(parentFolder);
-            folderRepository.save(parentFolder);
-        }
-    }
 }

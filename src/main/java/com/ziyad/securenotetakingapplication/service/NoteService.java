@@ -7,7 +7,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface NoteService {
-    NoteDTO createNoteInFolder(User user, NoteDTO noteDTO);
+    NoteDTO createNoteInFolder(User user, NoteDTO noteDTO, Long folderId);
 
-    NoteResponse getNotesInFolder(User user, String folderName, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
+    NoteResponse getNotesInFolder(User user, Long folderId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
+
+    NoteDTO deleteNotesFromFolder(User user, Long folderId, Long noteId);
+
+    NoteDTO updateNoteFromFolder(User user, Long folderId, Long noteId, NoteDTO noteDTO);
+
+    NoteDTO getNoteById(User user, Long noteId);
 }

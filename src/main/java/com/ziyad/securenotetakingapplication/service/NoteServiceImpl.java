@@ -2,6 +2,7 @@ package com.ziyad.securenotetakingapplication.service;
 
 import com.ziyad.securenotetakingapplication.config.AppConstants;
 import com.ziyad.securenotetakingapplication.exceptions.APIException;
+import com.ziyad.securenotetakingapplication.exceptions.ResourceNotFoundException;
 import com.ziyad.securenotetakingapplication.model.Folder;
 import com.ziyad.securenotetakingapplication.model.Note;
 import com.ziyad.securenotetakingapplication.model.User;
@@ -29,16 +30,11 @@ public class NoteServiceImpl implements NoteService{
     private final ModelMapper modelMapper;
 
     @Override
-    public NoteDTO createNoteInFolder(User user, NoteDTO noteDTO) {
-        Folder folder = folderRepository.findByUserAndFolderName(user, noteDTO.getFolderName());
+    public NoteDTO createNoteInFolder(User user, NoteDTO noteDTO, Long folderId) {
+        Folder folder = folderRepository.findByUserAndFolderId(user, folderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Folder", "folderId", folderId));
 
-        if(folder == null){
-            folder = new Folder();
-            folder.setUser(user);
-            folder.setFolderName(noteDTO.getFolderName());
-            folder.setCreatedAt(LocalDateTime.now());
-            folderRepository.save(folder);
-        }
+
         if(noteRepository.existsByFolderAndNoteTitle(folder, noteDTO.getTitle())){
             throw new APIException("Note with this title already exists in this folder!");
         }
@@ -56,11 +52,10 @@ public class NoteServiceImpl implements NoteService{
     }
 
     @Override
-    public NoteResponse getNotesInFolder(User user, String folderName, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
-        Folder folder = folderRepository.findByUserAndFolderName(user, folderName);
-        if(folder == null){
-            throw new APIException("Folder does not exist!");
-        }
+    public NoteResponse getNotesInFolder(User user, Long folderId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+        Folder folder = folderRepository.findByUserAndFolderId(user, folderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Folder", "folderId", folderId));
+
         List<String> allowedSortFields = Arrays.asList("noteTitle", "noteUpdatedAt");
 
         if (!allowedSortFields.contains(sortBy)) {
@@ -88,5 +83,40 @@ public class NoteServiceImpl implements NoteService{
         noteResponse.setTotalElements(notePage.getTotalElements());
         noteResponse.setIsLastPage(notePage.isLast());
         return noteResponse;
+    }
+
+    @Override
+    public NoteDTO deleteNotesFromFolder(User user, Long folderId, Long noteId) {
+        Folder folder = folderRepository.findByUserAndFolderId(user, folderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Folder", "folderId", folderId));
+        Note note = noteRepository.findByFolderAndNoteId(folder, noteId)
+                .orElseThrow(() -> new ResourceNotFoundException("Note", "noteId", noteId));
+        noteRepository.delete(note);
+        return modelMapper.map(note, NoteDTO.class);
+    }
+
+    @Override
+    public NoteDTO updateNoteFromFolder(User user, Long folderId, Long noteId, NoteDTO noteDTO) {
+        Folder folder = folderRepository.findByUserAndFolderId(user, folderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Folder", "folderId", folderId));
+        Note note = noteRepository.findByFolderAndNoteId(folder, noteId)
+                .orElseThrow(() -> new ResourceNotFoundException("Note", "noteId", noteId));
+        if(!note.getNoteTitle().equals(noteDTO.getTitle())){
+            if(noteRepository.existsByFolderAndNoteTitle(folder, noteDTO.getTitle())){
+                throw new APIException("Note with this title already exists in this folder!");
+            }
+            note.setNoteTitle(noteDTO.getTitle());
+        }
+        note.setNoteContent(noteDTO.getContent());
+        note.setNoteUpdatedAt(LocalDateTime.now());
+        noteRepository.save(note);
+        return modelMapper.map(note, NoteDTO.class);
+    }
+
+    @Override
+    public NoteDTO getNoteById(User user, Long noteId) {
+        Note note = noteRepository.findById(noteId)
+                .orElseThrow(() -> new ResourceNotFoundException("Note", "noteId", noteId));
+        return modelMapper.map(note, NoteDTO.class);
     }
 }

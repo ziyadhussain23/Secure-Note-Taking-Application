@@ -53,30 +53,22 @@ public class FolderController {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", authentication.getName())), folderDTO);
     }
 
-    @PutMapping("/update/{folderName}")
-    public FolderDTO updateFolder(@PathVariable String folderName, Authentication authentication, @Valid @RequestBody FolderDTO folderDTO) {
+    @PutMapping("/update/{folderId}")
+    public FolderDTO updateFolder(@PathVariable Long folderId, Authentication authentication, @Valid @RequestBody FolderDTO folderDTO) {
         if(authentication == null) {
             throw new APIException("Please login first");
         }
         return folderService.updateFolder(userRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", authentication.getName())), folderDTO, folderName);
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", authentication.getName())), folderDTO, folderId);
     }
 
-    @PutMapping("/move/{folderName}")
-    public FolderDTO moveFolder(@PathVariable String folderName, Authentication authentication, @Valid @RequestBody FolderDTO folderDTO) {
-        if(authentication == null) {
-            throw new APIException("Please login first");
-        }
-        return folderService.moveFolder(userRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", authentication.getName())), folderDTO, folderName);
-    }
 
-    @DeleteMapping("/delete/{folderName}")
-    public FolderDTO deleteFolder(@PathVariable String folderName, Authentication authentication) {
+    @DeleteMapping("/delete/{folderId}")
+    public FolderDTO deleteFolder(@PathVariable Long folderId, Authentication authentication) {
         if(authentication == null) {
             throw new APIException("Please login first");
         }
         return folderService.deleteFolder(userRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", authentication.getName())), folderName);
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", authentication.getName())), folderId);
     }
 }

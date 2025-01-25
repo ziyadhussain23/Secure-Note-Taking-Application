@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-
+import java.util.Optional;
 
 
 @Repository
@@ -16,9 +16,5 @@ public interface FolderRepository extends JpaRepository<Folder, Long> {
 
     Boolean existsByUserAndFolderName(User user, String folderName);
 
-    Folder findByUserAndFolderName(User user, String folderName);
-
-    Boolean existsByUserAndParentFolderAndFolderName(User user, Folder parentFolder, String folderName);
-
-    void deleteFolderByParentFolder(Folder parentFolder);
+    Optional<Folder> findByUserAndFolderId(User user, Long folderId);
 }

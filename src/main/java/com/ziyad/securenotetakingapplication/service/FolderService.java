@@ -11,11 +11,8 @@ public interface FolderService {
 
     FolderResponse getAllFolders(User user, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
-    FolderDTO updateFolder(User byUsername, FolderDTO folderDTO, String folderName);
+    FolderDTO updateFolder(User byUsername, FolderDTO folderDTO, Long folderId);
 
-    FolderDTO deleteFolder(User user, String folderName);
-
-    FolderDTO moveFolder(User user, FolderDTO folderDTO, String folderName);
-
+    FolderDTO deleteFolder(User user, Long folderId);
 
 }

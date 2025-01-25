@@ -1,6 +1,5 @@
 package com.ziyad.securenotetakingapplication.security.jwt;
 
-
 import com.ziyad.securenotetakingapplication.security.services.UserDetailsImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -48,7 +47,8 @@ public class JwtUtils {
         return ResponseCookie.from(jwtCookie, jwt)
                 .path("/note")
                 .maxAge(24 * 60 * 60)
-                .httpOnly(false)
+                .httpOnly(true)
+                .sameSite("Strict")
                 .build();
     }
 
@@ -56,6 +56,8 @@ public class JwtUtils {
         return ResponseCookie.from(jwtCookie, "")
                 .path("/note")
                 .maxAge(0)
+                .httpOnly(true)
+                .sameSite("Strict")
                 .build();
     }
 

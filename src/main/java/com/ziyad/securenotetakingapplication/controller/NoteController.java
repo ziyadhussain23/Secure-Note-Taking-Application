@@ -20,18 +20,18 @@ public class NoteController {
     private final UserRepository userRepository;
 
 
-    @PostMapping("/folder/note/create")
-    public NoteDTO addNoteToFolder(Authentication authentication, @Valid @RequestBody NoteDTO noteDTO) {
+    @PostMapping("/{folderId}/note/create")
+    public NoteDTO addNoteToFolder(Authentication authentication, @PathVariable Long folderId,@Valid @RequestBody NoteDTO noteDTO) {
         if (authentication == null) {
             throw new APIException("Please login first");
         }
 
         return noteService.createNoteInFolder(userRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", authentication.getName())), noteDTO);
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", authentication.getName())), noteDTO, folderId);
     }
 
-    @GetMapping("/{folderName}/notes")
-    public NoteResponse getNotesInFolder(Authentication authentication, @PathVariable String folderName,
+    @GetMapping("/{folderID}/notes")
+    public NoteResponse getNotesInFolder(Authentication authentication, @PathVariable Long folderID,
                                          @RequestParam (name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
                                          @RequestParam (name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
                                          @RequestParam (name = "sortBy", defaultValue = AppConstants.SORT_BY_NOTE, required = false) String sortBy,
@@ -47,7 +47,37 @@ public class NoteController {
         }
 
         return noteService.getNotesInFolder(userRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", authentication.getName())), folderName,
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", authentication.getName())), folderID,
                 pageNumber, pageSize, sortBy, sortOrder);
+    }
+
+    @GetMapping("/note/{noteId}")
+    public NoteDTO getNoteById(Authentication authentication, @PathVariable Long noteId) {
+        if (authentication == null) {
+            throw new APIException("Please login first");
+        }
+
+        return noteService.getNoteById(userRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", authentication.getName())), noteId);
+    }
+
+    @DeleteMapping("/{folderId}/note/delete/{noteId}")
+    public NoteDTO deleteNotesFromFolder(Authentication authentication, @PathVariable Long folderId, @PathVariable Long noteId) {
+        if (authentication == null) {
+            throw new APIException("Please login first");
+        }
+
+        return noteService.deleteNotesFromFolder(userRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", authentication.getName())), folderId, noteId);
+    }
+
+    @PutMapping("/{folderId}/note/update/{noteId}")
+    public NoteDTO updateNoteFromFolder(Authentication authentication, @PathVariable Long folderId, @PathVariable Long noteId, @RequestBody NoteDTO noteDTO) {
+        if (authentication == null) {
+            throw new APIException("Please login first");
+        }
+
+        return noteService.updateNoteFromFolder(userRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", authentication.getName())), folderId, noteId, noteDTO);
     }
 }

@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class NoteDTO {
+
+    private Long noteId;
     @NotBlank
     private String title;
 
@@ -17,6 +19,5 @@ public class NoteDTO {
 
     private LocalDateTime updatedAt;
 
-    @NotBlank
     private String folderName;
 }
