@@ -94,4 +94,11 @@ public class FolderServiceImpl implements FolderService {
         return modelMapper.map(folder, FolderDTO.class);
     }
 
+    @Override
+    public FolderDTO getFolderById(User user, Long folderId) {
+        Folder folder = folderRepository.findByUserAndFolderId(user, folderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Folder", "folderId", folderId));
+        return modelMapper.map(folder, FolderDTO.class);
+    }
+
 }

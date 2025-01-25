@@ -7,11 +7,13 @@ const Signout = () => {
 
     useEffect(() => {
         const signoutUser = async () => {
-            try {
-                await authService.logout();
-                navigate('/login');
-            } catch (error) {
-                console.error('Failed to sign out', error);
+            if (window.confirm('Are you sure you want sign Out?')) {
+                try {
+                    await authService.logout();
+                    navigate('/login');
+                } catch (error) {
+                    console.error('Failed to sign out', error);
+                }
             }
         };
 

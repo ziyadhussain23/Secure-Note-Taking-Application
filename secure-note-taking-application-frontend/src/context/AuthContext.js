@@ -53,13 +53,15 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = async () => {
-        try {
-            await authService.logout();
-        } finally {
-            Cookies.remove('SecureNoteTakingApplication');
-            setIsAuthenticated(false);
-            setError(null);
-            navigate('/login');
+        if (window.confirm('Are you sure you want sign Out?')) {
+            try {
+                await authService.logout();
+            } finally {
+                Cookies.remove('SecureNoteTakingApplication');
+                setIsAuthenticated(false);
+                setError(null);
+                navigate('/login');
+            }
         }
     };
 

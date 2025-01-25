@@ -1,6 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import noteService from '../../services/noteService';
+
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+`;
 
 const EditorContainer = styled.div`
     background: rgba(30, 41, 59, 0.95);
@@ -10,6 +21,7 @@ const EditorContainer = styled.div`
     box-shadow: 0 8px 32px rgba(0, 255, 255, 0.1);
     border: 1px solid rgba(0, 255, 255, 0.1);
     margin: 20px;
+    animation: ${fadeIn} 0.5s ease-in-out;
 `;
 
 const Input = styled.input`
@@ -20,6 +32,7 @@ const Input = styled.input`
     border: 1px solid rgba(0, 255, 255, 0.2);
     background: rgba(30, 41, 59, 0.95);
     color: #ffffff;
+    text-align: center;
 `;
 
 const Textarea = styled.textarea`
@@ -30,22 +43,35 @@ const Textarea = styled.textarea`
     border: 1px solid rgba(0, 255, 255, 0.2);
     background: rgba(30, 41, 59, 0.95);
     color: #ffffff;
-    height: 500px;
+    height: 480px;
 `;
 
+
 const Button = styled.button`
-    padding: 10px 20px;
-    border-radius: 8px;
+    padding: 12px 24px;
     border: none;
-    background: linear-gradient(135deg, #00c9ff, #92fe9d);
-    color: white;
+    border-radius: 8px;
+    font-size: 1rem;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 201, 255, 0.3);
     transition: all 0.3s ease;
 
-    &:hover {
-        background: linear-gradient(135deg, #92fe9d, #00c9ff);
-    }
+    ${props => props.primary ? `
+        background: linear-gradient(45deg, #6e8efb, #a777e3);
+        color: white;
+        &:hover {
+            background: linear-gradient(45deg, #00b4e6, #7fe48c);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 201, 255, 0.3);
+        }
+    ` : `
+        background: rgba(0, 255, 255, 0.1);
+        color: #00ffff;
+        border: 1px solid rgba(0, 255, 255, 0.2);
+        &:hover {
+            background: rgba(0, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+    `}
 `;
 
 const NoteEditor = ({ noteId, folderId, onNoteSaved }) => {
@@ -82,7 +108,8 @@ const NoteEditor = ({ noteId, folderId, onNoteSaved }) => {
         }
     }, [noteId, fetchNote]);
 
-    const handleSaveNote = async () => {
+    const handleSaveNote = async (e) => {
+        e.preventDefault();
         setError('');
         try {
             if (noteId) {
@@ -96,14 +123,20 @@ const NoteEditor = ({ noteId, folderId, onNoteSaved }) => {
             setError(error.response?.data?.message || 'Failed to save note');
         }
     };
+    const handleBack = () => {
+        onNoteSaved();
+    };
 
     if (isLoading) {
-        return <div>Loading note...</div>;
+        return <div>Select a folder or note to edit or create a new one.</div>;
     }
 
     return (
         <EditorContainer>
-            <h2>{noteId ? 'Edit Note' : 'Create Note'}</h2>
+            <Button onClick={handleBack}>
+                ← Back
+            </Button>
+            <h2 align= "center">{noteId ? 'Note' : 'Create Note'}</h2>
             {error && <div style={{ color: 'red' }}>{error}</div>}
             <Input
                 type="text"
@@ -116,7 +149,7 @@ const NoteEditor = ({ noteId, folderId, onNoteSaved }) => {
                 onChange={(e) => setNote({ ...note, content: e.target.value })}
                 placeholder="Note Content"
             />
-            <Button onClick={handleSaveNote}>
+            <Button onClick={handleSaveNote} primary>
                 {noteId ? 'Update Note' : 'Create Note'}
             </Button>
         </EditorContainer>

@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import folderService from '../../services/folderService';
+
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+`;
 
 const StyledForm = styled.form`
     display: flex;
@@ -18,6 +29,7 @@ const EditorContainer = styled.div`
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 255, 255, 0.1);
     border: 1px solid rgba(0, 255, 255, 0.1);
+    animation: ${fadeIn} 0.5s ease-in-out;
 `;
 
 const Input = styled.input`
@@ -50,9 +62,10 @@ const Button = styled.button`
     transition: all 0.3s ease;
     
     ${props => props.primary ? `
-        background: linear-gradient(45deg, #00c9ff, #92fe9d);
+        background: linear-gradient(45deg, #6e8efb, #a777e3);
         color: white;
         &:hover {
+            background: linear-gradient(45deg, #00b4e6, #7fe48c);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 201, 255, 0.3);
         }

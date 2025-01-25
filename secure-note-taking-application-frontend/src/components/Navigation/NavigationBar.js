@@ -77,13 +77,18 @@ const NavigationBar = () => {
         navigate('/login');
     };
 
+    const handleFoldersClick = () => {
+        navigate('/folders', { replace: true });
+        navigate(0); // This will refresh the page
+    };
+
     return (
         <Navigation>
             <NavList>
                 <NavSection>
                     {isAuthenticated && (
                         <NavItem>
-                            <Link to="/folders">Folders</Link>
+                            <Link to="/folders" onClick={handleFoldersClick}>Folders</Link>
                         </NavItem>
                     )}
                 </NavSection>

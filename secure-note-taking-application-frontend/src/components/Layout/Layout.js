@@ -83,6 +83,7 @@ const Layout = () => {
                         folderId={selectedFolderId}
                         onEditNote={handleEditNote}
                         onCreateNote={handleCreateNote}
+                        onSelectNote={handleEditNote} 
                         refresh={refresh} // Pass refresh state
                     />
                 )}
@@ -97,6 +98,7 @@ const Layout = () => {
                             noteId={selectedNoteId}
                             folderId={selectedFolderId} // Pass folderId to NoteEditor
                             onNoteSaved={handleNoteSaved}
+                            key={selectedNoteId || 'new'}
                         />
                     ) : (
                         <div>Select a folder or note to edit or create a new one.</div>

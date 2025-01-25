@@ -3,6 +3,19 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import noteService from '../../services/noteService';
+import {keyframes} from "styled-components";
+import folderService from "../../services/folderService";
+
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+`;
 
 const Sidebar = styled.div`
     width: 250px;
@@ -14,6 +27,7 @@ const Sidebar = styled.div`
     top: 56px;
     left: 250px; /* Adjusted to be next to FolderList */
     height: 100%;
+    padding-bottom: 80px;
 `;
 
 const NoteCard = styled.div`
@@ -27,7 +41,8 @@ const NoteCard = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-
+    animation: ${fadeIn} 0.5s ease-in-out;
+    margin-bottom: 5px;
     &:hover {
         transform: translateY(-5px);
         box-shadow: 0 12px 40px rgba(0, 255, 255, 0.2);
@@ -65,9 +80,9 @@ const IconButton = styled.button`
 `;
 
 const CreateButton = styled.button`
-    position: fixed;
-    bottom: 70px;
-    right: 20px;
+    position: sticky;
+    bottom: 20px;
+    margin-left: auto;
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -80,6 +95,7 @@ const CreateButton = styled.button`
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
+    animation: ${fadeIn} 0.5s ease-in-out;
     
     &:hover {
         background: linear-gradient(45deg, #00b4e6, #7fe48c);
@@ -88,8 +104,9 @@ const CreateButton = styled.button`
     }
 `;
 
-const NoteList = ({ folderId, onEditNote, onCreateNote, refresh }) => {
+const NoteList = ({ folderId, onEditNote, onCreateNote, onSelectNote, refresh }) => {
     const [notes, setNotes] = useState([]);
+    const [folderName, setFolderName] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
 
@@ -113,16 +130,30 @@ const NoteList = ({ folderId, onEditNote, onCreateNote, refresh }) => {
         }
     }, [folderId]);
 
+    const fetchFolderName = useCallback(async () => {
+        try {
+            const response = await folderService.getFolder(folderId);
+            console.log(response);
+            setFolderName(response.data.folderName);
+        } catch (error) {
+            console.error('Error fetching folder name:', error);
+            setFolderName('Unknown Folder');
+        }
+    }, [folderId]);
+
     useEffect(() => {
         console.log('Selected Folder ID:', folderId);
+        fetchFolderName();
         fetchNotes();
-    }, [folderId, fetchNotes, refresh]);
+    }, [folderId, fetchNotes,  fetchFolderName, refresh]);
 
     const handleDeleteNote = async (noteId) => {
         if (window.confirm('Are you sure you want to delete this note?')) {
             try {
                 await noteService.deleteNotesFromFolder(folderId, noteId);
                 fetchNotes();
+
+                window.location.reload(); // Reload the page after deleting the note
             } catch (error) {
                 console.error('Error deleting note:', error);
                 setError(error.response?.data?.message ||  'Error deleting note');
@@ -136,11 +167,11 @@ const NoteList = ({ folderId, onEditNote, onCreateNote, refresh }) => {
 
     return (
         <Sidebar>
-            <h2>My Notes</h2>
+            <h2>My Notes: {folderName}</h2>
             {error && <div style={{ color: 'red', marginBottom: '20px' }}>{error}</div>}
             <>
                 {notes.map(note => (
-                    <NoteCard key={note.noteId}>
+                    <NoteCard key={note.noteId} onClick={() => onSelectNote(note.noteId)}>
                         <NoteTitle>{note.title}</NoteTitle> {/* Ensure this matches the note data structure */}
                         <ActionButtons>
                             <IconButton 

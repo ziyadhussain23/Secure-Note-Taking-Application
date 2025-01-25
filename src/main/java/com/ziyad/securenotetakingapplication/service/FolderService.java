@@ -15,4 +15,5 @@ public interface FolderService {
 
     FolderDTO deleteFolder(User user, Long folderId);
 
+    FolderDTO getFolderById(User user, Long folderId);
 }

@@ -42,6 +42,15 @@ public class FolderController {
         return new ResponseEntity<>(folderResponse, org.springframework.http.HttpStatus.OK);
     }
 
+    @GetMapping("/{folderId}")
+    public FolderDTO getFolderById(Authentication authentication, @PathVariable Long folderId) {
+        if(authentication == null) {
+            throw new APIException("Please login first");
+        }
+        return folderService.getFolderById(userRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", authentication.getName())), folderId);
+    }
+
 
     @PostMapping("/create")
     public FolderDTO addFolder(Authentication authentication, @Valid @RequestBody FolderDTO folderDTO) {

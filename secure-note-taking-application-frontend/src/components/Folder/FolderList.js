@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import folderService from '../../services/folderService';
+
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+`;
 
 const Sidebar = styled.div`
     width: 250px;
@@ -16,6 +27,7 @@ const Sidebar = styled.div`
     top: 56px;
     left: 0;
     height: 100%;
+    padding-bottom: 80px;
 `;
 
 const FolderCard = styled.div`
@@ -29,6 +41,8 @@ const FolderCard = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    animation: ${fadeIn} 0.5s ease-in-out;
+    margin-bottom: 5px;
 
     &:hover {
         transform: translateY(-5px);
@@ -67,13 +81,13 @@ const IconButton = styled.button`
 `;
 
 const CreateButton = styled.button`
-    position: fixed;
-    bottom: 70px;
-    right: 20px;
+    position: sticky;
+    bottom: 0%;
+    left: 200px;
     width: 60px;
     height: 60px;
     border-radius: 50%;
-   background: linear-gradient(45deg, #6e8efb, #a777e3);
+    background: linear-gradient(45deg, #6e8efb, #a777e3);
     color: white;
     border: none;
     cursor: pointer;
@@ -81,6 +95,7 @@ const CreateButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
+    animation: ${fadeIn} 0.5s ease-in-out;
     transition: all 0.3s ease;
     
     &:hover {
@@ -123,6 +138,7 @@ const FolderList = ({ onEditFolder, onCreateFolder, onSelectFolder, refresh }) =
                 toast.success('Folder deleted successfully', {
                     icon: false, // Remove the default icon
                 });
+                window.location.reload();
                 fetchFolders();
             } catch (error) {
                 console.error('Error deleting folder:', error);
@@ -134,7 +150,7 @@ const FolderList = ({ onEditFolder, onCreateFolder, onSelectFolder, refresh }) =
     };
 
     if (isLoading) {
-        return <div>Loading folders...</div>;
+        return <div>Select a folder or note to edit or create a new one.</div>;
     }
 
     return (
