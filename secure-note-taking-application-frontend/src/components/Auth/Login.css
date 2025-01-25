@@ -1,0 +1,204 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body, #root {
+    height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
+    background: #1a1a1a;
+}
+
+.login-container {
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image:
+        linear-gradient(135deg, #0f172a 0%, #1e293b 100%),
+        repeating-linear-gradient(
+            45deg,
+            rgba(0, 255, 255, 0.05) 0px,
+            rgba(0, 255, 255, 0.05) 1px,
+            transparent 1px,
+            transparent 10px
+        );
+    background-blend-mode: overlay;
+    animation: pulse 4s ease infinite;
+    padding: 20px;
+}
+
+@keyframes pulse {
+    0% { background-color: #0f172a; }
+    50% { background-color: #1e293b; }
+    100% { background-color: #0f172a; }
+}
+
+.login-box {
+    background: rgba(30, 41, 59, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 3rem;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0, 255, 255, 0.1);
+    width: 100%;
+    max-width: 420px;
+    border: 1px solid rgba(0, 255, 255, 0.1);
+    animation: fadeIn 0.5s ease;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+}
+
+.login-box:hover {
+    box-shadow: 0 8px 32px rgba(0, 255, 255, 0.2);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.form-input {
+    background: rgba(15, 23, 42, 0.8);
+    color: #fff;
+    border: 1px solid rgba(0, 255, 255, 0.1);
+}
+.form-input:focus {
+    border-color: rgba(0, 255, 255, 0.5);
+    box-shadow: 0 0 0 2px rgba(0, 255, 255, 0.1);
+}
+
+.login-title {
+    color: #fff;
+}
+
+.input-icon {
+    color: rgba(0, 255, 255, 0.5);
+}
+
+.login-button {
+    background: linear-gradient(45deg, #6e8efb, #a777e3);
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;    
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.login-button:hover {
+    background: linear-gradient(45deg, #00b4e6, #7fe48c);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 201, 255, 0.3);
+}
+
+.login-button:active {
+    transform: translateY(0);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6e8efb;
+    font-size: 1.2rem;
+}
+
+.error-message {
+    background: rgba(255, 82, 82, 0.1);
+    color: #ff5252;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    text-align: center;
+    border: 1px solid rgba(255, 82, 82, 0.2);
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 2rem;
+    animation: fadeIn 0.5s ease;
+}
+
+.logo img {
+    width: 120px;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.05);
+}
+
+.login-title {
+    text-align: center;
+    color: #ffffff;
+    margin: 1.5rem 0;
+    font-size: 2rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: -0.5px;
+}
+
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6b7280;
+}
+
+.forgot-password {
+    color: #6e8efb;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+    color: #4a6ee0;
+    text-decoration: underline;
+}
+
+.error-message {
+    background: rgba(255, 82, 82, 0.1);
+    color: #ff5252;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    text-align: center;
+    border: 1px solid rgba(255, 82, 82, 0.2);
+}
