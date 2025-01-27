@@ -24,7 +24,7 @@ public class Note {
     private String noteTitle;
 
     @Lob
-    @Column(name = "note_content", nullable = false)
+    @Column(name = "note_content", nullable = false, columnDefinition = "MEDIUMTEXT")
     private String noteContent;
 
     @Column(name = "note_created_at", nullable = false)
