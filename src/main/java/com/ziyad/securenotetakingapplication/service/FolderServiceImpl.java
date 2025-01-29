@@ -77,6 +77,9 @@ public class FolderServiceImpl implements FolderService {
 
     @Override
     public FolderDTO updateFolder(User user, FolderDTO folderDTO, Long folderId) {
+        if(folderRepository.existsByUserAndFolderName(user, folderDTO.getFolderName())) {
+            throw new APIException("Folder with this name already exists");
+        }
         Folder folder = folderRepository.findByUserAndFolderId(user, folderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Folder", "folderId", folderId));
         folder.setFolderName(folderDTO.getFolderName());
