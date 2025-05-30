@@ -1,142 +1,218 @@
-# Secure Note Taking Application
+# Smart Waste Management System
 
-This repository serves as the backend for the Secure Note Taking Application, while the frontend is located in the subdirectory `secure-note-taking-application-frontend`. Follow this guide to set up, run, and understand both parts of the project.
+A comprehensive web-based waste management solution built with **Spring Boot** and **Thymeleaf**, designed to streamline waste collection processes, manage pickup requests, handle complaints, and optimize recycling operations through an intuitive dashboard interface.
 
-----
+## 🌟 Features
 
-## Backend Overview
+- **User Management**: Multi-role authentication system (Admin, Citizen, Employee)
+- **Pickup Request Management**: Citizens can request waste collection with quantity tracking
+- **Complaint System**: Submit and track waste management complaints
+- **Collection Scheduling**: Automated scheduling and route planning for waste collection
+- **Recycling Centers**: Manage and locate recycling facilities
+- **Waste Categories**: Classify different types of waste for proper handling
+- **Dashboard Analytics**: Real-time statistics and comprehensive overview
+- **Status Tracking**: Monitor progress of requests, complaints, and schedules
 
-The backend is built with Java and Spring Boot to provide a robust and secure API for managing user data and notes. It handles user authentication, note management (create, read, update, and delete), and ensures that all data is securely stored and transmitted.
+## 🛠️ Technologies Used
 
-### Key Features
+- **Backend**: Java with Spring Boot (60.7%)
+  - Spring Boot Web
+  - Spring Data JPA
+  - Spring Security (Authentication)
+  - Hibernate ORM
+  - Bean Validation
 
-1. **User Management**  
-   - Registration, login, and session handling.  
-   - Secure password storage and user validation.
+- **Frontend**: HTML with Thymeleaf (39.3%)
+  - Thymeleaf Template Engine
+  - Bootstrap 4 CSS Framework
+  - Responsive Web Design
 
-2. **Note Management**  
-   - CRUD operations for notes.  
-   - Handling note content securely for confidentiality.
+- **Database**: JPA/Hibernate compatible (MySQL/PostgreSQL)
 
-3. **Security and Encryption**  
-   - Uses JWT (JSON Web Tokens) for stateless authentication.  
-   - Encrypts sensitive note data both in transit and at rest.
-
-4. **Data Persistence**  
-   - Uses Hibernate for Object-Relational Mapping (ORM) with a relational database (e.g., MySQL or PostgreSQL).  
-   - Database configurations are managed via Spring Boot’s application properties.
-
-### Technologies Used
-
-- **Java**: Main programming language.
-- **Spring Boot**: For building production-grade applications.
-- **Spring Security**: To secure endpoints and manage authentication.
-- **JWT (JSON Web Token)**: For stateless authentication.
-- **Hibernate**: For ORM and database interactions.
-- **Maven**: For project build and dependency management.
-
-### Setup and Running the Backend
-
-1. **Clone the Repository**  
-   ```bash
-   git clone https://github.com/ziyadhussain23/Secure-Note-Taking-Application.git
-   ```
-
-2. **Configuration**  
-   Update the `application.properties` (or `application.yml`) file with your database configuration and any other required properties.
-
-3. **Build the Project**  
-   Navigate to the root directory of the project and run:
-   ```bash
-   mvn clean install
-   ```
-
-4. **Run the Backend Application**  
-   Start the Spring Boot application:
-   ```bash
-   mvn spring-boot:run
-   ```
-   The backend will be available at [http://localhost:8080](http://localhost:8080).
-
-5. **Testing**  
-   - **Unit Tests**  
-     Run unit tests with:
-     ```bash
-     mvn test
-     ```
-   - **Integration Tests**  
-     Use the provided test suite to verify that API endpoints work as expected.
-
-### API Endpoints
-
-- **Authentication**:  
-  Endpoints under `/api/auth/**` handle user login, registration, and token refresh.
-
-- **Notes**:  
-  Endpoints under `/api/notes/**` allow for creating, reading, updating, and deleting notes.
-
-- **Users**:  
-  Endpoints under `/api/users/**` manage user profiles and related functionalities.
-
-----
-
-## Frontend Overview
-
-The frontend is built with React using Create React App and is located in the `secure-note-taking-application-frontend` subdirectory. This interface interacts with the backend API to manage secure note taking.
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js and npm must be installed.
+- **Java Development Kit (JDK)** 11 or higher
+- **Maven** 3.6+
+- **MySQL** or **PostgreSQL** database
+- **IDE** (IntelliJ IDEA, Eclipse, or VS Code)
 
-### Setup
+### Installation
 
-1. **Navigate to the Frontend Directory**  
-   Change into the frontend directory:
+1. **Clone the repository**
    ```bash
-   cd secure-note-taking-application-frontend
+   git clone https://github.com/ziyadhussain23/Smart_Waste_Manangement_System.git
+   cd Smart_Waste_Manangement_System
    ```
 
-2. **Install Dependencies**  
-   Install the required packages by running:
-   ```bash
-   npm install
+2. **Configure Database**
+   Create a new database and update `src/main/resources/application.properties`:
+   ```properties
+   spring.datasource.url=jdbc:mysql://localhost:3306/waste_management_db
+   spring.datasource.username=your_username
+   spring.datasource.password=your_password
+   spring.jpa.hibernate.ddl-auto=update
+   spring.jpa.show-sql=true
    ```
 
-### Running the Frontend
-
-1. **Start the Development Server**  
-   Launch the frontend with:
+3. **Build and Run**
    ```bash
-   npm start
+   mvn clean install
+   mvn spring-boot:run
    ```
-   This will open the app in your default browser at [http://localhost:3000](http://localhost:3000).
 
-2. **Development Mode**  
-   The application will automatically reload when file changes are detected, and any lint errors will be displayed in the console.
+4. **Access the Application**
+   - Open your browser and navigate to `http://localhost:8080`
+   - Sign up for a new account or login with existing credentials
 
-### Testing and Building
+## 📁 Project Structure
 
-- **Running Tests**  
-  To run the test suite in interactive watch mode:
-  ```bash
-  npm test
-  ```
+```
+Smart_Waste_Manangement_System/
+├── src/
+│   ├── main/
+│   │   ├── java/com/smart_waste_management_system/
+│   │   │   ├── controller/           # Spring MVC Controllers
+│   │   │   │   ├── ComplaintController.java
+│   │   │   │   ├── PickupRequestController.java
+│   │   │   │   ├── RecyclingCenterController.java
+│   │   │   │   └── ...
+│   │   │   ├── model/               # JPA Entity Classes
+│   │   │   │   ├── User.java
+│   │   │   │   ├── PickupRequest.java
+│   │   │   │   ├── Complaint.java
+│   │   │   │   ├── WasteCategory.java
+│   │   │   │   └── ...
+│   │   │   ├── repository/          # JPA Repositories
+│   │   │   │   ├── UserRepository.java
+│   │   │   │   ├── ComplaintRepository.java
+│   │   │   │   └── ...
+│   │   │   ├── exception/           # Exception Handlers
+│   │   │   └── SmartWasteManagementSystemApplication.java
+│   │   └── resources/
+│   │       ├── templates/           # Thymeleaf HTML Templates
+│   │       │   ├── dashboard.html
+│   │       │   ├── login.html
+│   │       │   ├── signup.html
+│   │       │   ├── complaint/
+│   │       │   ├── request/
+│   │       │   ├── schedule/
+│   │       │   ├── center/
+│   │       │   └── category/
+│   │       └── application.properties
+│   └── test/                        # Test Classes
+├── target/                          # Compiled Classes
+├── pom.xml                         # Maven Dependencies
+└── README.md
+```
 
-- **Building for Production**  
-  When you're ready to deploy the frontend:
-  ```bash
-  npm run build
-  ```
-  The optimized production build will be generated in the `build` folder.
+## 🎯 Key Features & Usage
 
-### Additional Information
+### 1. **User Roles**
+- **Admin**: Full system access, manage all entities
+- **Citizen**: Submit pickup requests and complaints
+- **Employee**: Process requests and update schedules
 
-- **Documentation**  
-  For more details on using Create React App, refer to the [official documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 2. **Pickup Request Management**
+- Create new pickup requests with quantity specifications
+- Select waste categories (Organic, Recyclable, Hazardous, etc.)
+- Track request status (Requested → Collected)
+- View all requests in organized lists
 
-- **Deployment**  
-  Additional deployment instructions can be found in the Create React App documentation.
+### 3. **Complaint System**
+- Submit detailed complaints about waste management issues
+- Track complaint status (Pending → Resolved)
+- Admin/Employee resolution workflow
 
-----
+### 4. **Collection Scheduling**
+- Create area-based collection schedules
+- Date-wise planning and organization
+- Status tracking (Scheduled → Completed)
 
-This unified README provides an end-to-end guide covering the backend functionality and the frontend setup located within the repository. Follow these instructions to set up and run the Secure Note Taking Application successfully.
+### 5. **Recycling Centers**
+- Manage recycling facility locations
+- Contact information and details
+- Easy access for citizens
+
+## 🔧 API Endpoints & Controllers
+
+| Controller | Base Path | Description |
+|------------|-----------|-------------|
+| **DashboardController** | `/dashboard` | Main dashboard and statistics |
+| **ComplaintController** | `/complaints` | Complaint management |
+| **PickupRequestController** | `/requests` | Pickup request handling |
+| **RecyclingCenterController** | `/centers` | Recycling center management |
+| **CollectionScheduleController** | `/schedules` | Collection scheduling |
+| **WasteCategoryController** | `/categories` | Waste category management |
+
+## 🗃️ Database Entities
+
+- **User**: System users with role-based access
+- **PickupRequest**: Waste collection requests
+- **Complaint**: User complaints and issues
+- **WasteCategory**: Classification of waste types
+- **CollectionSchedule**: Scheduled collection activities
+- **RecyclingCenter**: Recycling facility information
+
+## 🔐 Authentication & Security
+
+- **Form-based authentication** with username/password
+- **Role-based access control** (RBAC)
+- **Session management** for user security
+- **Input validation** with Bean Validation
+
+## 🧪 Testing
+
+Run the test suite:
+```bash
+mvn test
+```
+
+## 🎨 Frontend Features
+
+- **Responsive Design**: Bootstrap 4 for mobile-friendly interface
+- **Form Validation**: Client and server-side validation
+- **Dynamic Content**: Thymeleaf templating for dynamic pages
+- **User-Friendly Navigation**: Intuitive dashboard and menu system
+
+## 🤝 Contributing
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/NewFeature`)
+3. Commit your changes (`git commit -m 'Add NewFeature'`)
+4. Push to the branch (`git push origin feature/NewFeature`)
+5. Open a Pull Request
+
+## 🐛 Known Issues & Limitations
+
+- Results may be incomplete due to search limitations
+- For complete code exploration, visit: [GitHub Code Search](https://github.com/ziyadhussain23/Smart_Waste_Manangement_System/search?type=code)
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+**Ziyad Hussain**
+- GitHub: [@ziyadhussain23](https://github.com/ziyadhussain23)
+
+## 🏗️ Architecture
+
+This application follows the **MVC (Model-View-Controller)** pattern:
+- **Model**: JPA entities representing database tables
+- **View**: Thymeleaf templates for user interface
+- **Controller**: Spring Boot controllers handling HTTP requests
+
+## 🌱 Environmental Impact
+
+This system promotes environmental sustainability by:
+- Optimizing waste collection routes
+- Encouraging proper waste categorization
+- Facilitating recycling through center management
+- Reducing waste through efficient scheduling
+
+---
+
+*Last updated: May 30, 2025*
