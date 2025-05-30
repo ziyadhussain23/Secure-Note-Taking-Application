@@ -1,193 +1,342 @@
-# Smart Waste Management System
+# 🔐 Secure Note Taking Application
 
-A comprehensive web-based waste management solution built with **Spring Boot** and **Thymeleaf**, designed to streamline waste collection processes, manage pickup requests, handle complaints, and optimize recycling operations through an intuitive dashboard interface.
+A full-stack secure note-taking application featuring **JWT authentication**, **role-based access control**, and an intuitive **React frontend**. Built with Spring Boot backend and modern web technologies to provide a safe and efficient way to organize and manage personal notes.
 
 ## 🌟 Features
 
-- **User Management**: Multi-role authentication system (Admin, Citizen, Employee)
-- **Pickup Request Management**: Citizens can request waste collection with quantity tracking
-- **Complaint System**: Submit and track waste management complaints
-- **Collection Scheduling**: Automated scheduling and route planning for waste collection
-- **Recycling Centers**: Manage and locate recycling facilities
-- **Waste Categories**: Classify different types of waste for proper handling
-- **Dashboard Analytics**: Real-time statistics and comprehensive overview
-- **Status Tracking**: Monitor progress of requests, complaints, and schedules
+### 🔒 Security Features
+- **JWT Authentication**: Secure token-based authentication system
+- **Role-Based Access Control**: Multi-level user permissions (ADMIN, EDITOR, VIEWER)
+- **Secure Session Management**: HTTP-only cookies with CSRF protection
+- **Password Encryption**: BCrypt hashing for secure password storage
+- **Protected Routes**: Frontend and backend route protection
 
-## 🛠️ Technologies Used
+### 📁 Note Organization
+- **Folder Management**: Organize notes in custom folders
+- **Hierarchical Structure**: Nested folder organization
+- **Search & Filter**: Advanced note discovery capabilities
+- **Pagination**: Efficient handling of large note collections
+- **Sorting Options**: Customizable sorting by title, date, etc.
 
-- **Backend**: Java with Spring Boot (60.7%)
-  - Spring Boot Web
-  - Spring Data JPA
-  - Spring Security (Authentication)
-  - Hibernate ORM
-  - Bean Validation
+### ✏️ Note Management
+- **Rich Text Support**: Create and edit formatted notes
+- **Real-time Updates**: Live note editing and saving
+- **Version Control**: Track note modifications with timestamps
+- **Bulk Operations**: Multiple note selection and actions
+- **Note Templates**: Pre-defined note structures
 
-- **Frontend**: HTML with Thymeleaf (39.3%)
-  - Thymeleaf Template Engine
-  - Bootstrap 4 CSS Framework
-  - Responsive Web Design
+### 🎨 User Experience
+- **Modern UI**: Clean, responsive React interface
+- **Dark Theme**: Eye-friendly dark mode design
+- **Mobile Responsive**: Optimized for all device sizes
+- **Toast Notifications**: Real-time user feedback
+- **Smooth Animations**: Enhanced user interactions
 
-- **Database**: JPA/Hibernate compatible (MySQL/PostgreSQL)
+## 🛠️ Technology Stack
+
+### Backend (Java - 47%)
+- **Spring Boot** - Application framework
+- **Spring Security** - Authentication and authorization
+- **Spring Data JPA** - Database operations
+- **JWT (JSON Web Tokens)** - Secure authentication
+- **Hibernate** - ORM mapping
+- **MySQL/PostgreSQL** - Database storage
+- **Bean Validation** - Input validation
+- **Lombok** - Code generation
+
+### Frontend (JavaScript - 42.5%)
+- **React** - Component-based UI library
+- **React Router** - Client-side routing
+- **Styled Components** - CSS-in-JS styling
+- **Axios** - HTTP client for API calls
+- **React Context** - State management
+- **React Toastify** - Notification system
+- **JS Cookie** - Cookie management
+
+### Styling (CSS - 9.1%, HTML - 1.4%)
+- **Styled Components** - Modern CSS-in-JS
+- **Responsive Design** - Mobile-first approach
+- **Custom Themes** - Configurable design system
+- **Bootstrap Integration** - Component styling
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- **Java Development Kit (JDK)** 11 or higher
-- **Maven** 3.6+
-- **MySQL** or **PostgreSQL** database
-- **IDE** (IntelliJ IDEA, Eclipse, or VS Code)
+**Backend Requirements:**
+- Java 17 or higher
+- Maven 3.6+
+- MySQL 8.0+ or PostgreSQL 12+
 
-### Installation
+**Frontend Requirements:**
+- Node.js 16+ and npm 8+
+- Modern web browser
+
+### Backend Setup
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/ziyadhussain23/Smart_Waste_Manangement_System.git
-   cd Smart_Waste_Manangement_System
+   git clone https://github.com/ziyadhussain23/Secure-Note-Taking-Application.git
+   cd Secure-Note-Taking-Application
    ```
 
 2. **Configure Database**
-   Create a new database and update `src/main/resources/application.properties`:
    ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/waste_management_db
+   # src/main/resources/application.properties
+   spring.datasource.url=jdbc:mysql://localhost:3306/secure_notes_db
    spring.datasource.username=your_username
    spring.datasource.password=your_password
    spring.jpa.hibernate.ddl-auto=update
    spring.jpa.show-sql=true
+   
+   # JWT Configuration
+   app.jwtSecret=mySecretKey
+   app.jwtExpirationMs=86400000
    ```
 
-3. **Build and Run**
+3. **Build and Run Backend**
    ```bash
    mvn clean install
    mvn spring-boot:run
    ```
 
-4. **Access the Application**
-   - Open your browser and navigate to `http://localhost:8080`
-   - Sign up for a new account or login with existing credentials
+   Backend will run on `http://localhost:8080`
+
+### Frontend Setup
+
+1. **Navigate to frontend directory**
+   ```bash
+   cd secure-note-taking-application-frontend
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment**
+   ```bash
+   # Create .env file
+   REACT_APP_API_URL=http://localhost:8080/note
+   ```
+
+4. **Start Frontend**
+   ```bash
+   npm start
+   ```
+
+   Frontend will run on `http://localhost:3000`
 
 ## 📁 Project Structure
 
 ```
-Smart_Waste_Manangement_System/
-├── src/
-│   ├── main/
-│   │   ├── java/com/smart_waste_management_system/
-│   │   │   ├── controller/           # Spring MVC Controllers
-│   │   │   │   ├── ComplaintController.java
-│   │   │   │   ├── PickupRequestController.java
-│   │   │   │   ├── RecyclingCenterController.java
-│   │   │   │   └── ...
-│   │   │   ├── model/               # JPA Entity Classes
-│   │   │   │   ├── User.java
-│   │   │   │   ├── PickupRequest.java
-│   │   │   │   ├── Complaint.java
-│   │   │   │   ├── WasteCategory.java
-│   │   │   │   └── ...
-│   │   │   ├── repository/          # JPA Repositories
-│   │   │   │   ├── UserRepository.java
-│   │   │   │   ├── ComplaintRepository.java
-│   │   │   │   └── ...
-│   │   │   ├── exception/           # Exception Handlers
-│   │   │   └── SmartWasteManagementSystemApplication.java
-│   │   └── resources/
-│   │       ├── templates/           # Thymeleaf HTML Templates
-│   │       │   ├── dashboard.html
-│   │       │   ├── login.html
-│   │       │   ├── signup.html
-│   │       │   ├── complaint/
-│   │       │   ├── request/
-│   │       │   ├── schedule/
-│   │       │   ├── center/
-│   │       │   └── category/
-│   │       └── application.properties
-│   └── test/                        # Test Classes
-├── target/                          # Compiled Classes
-├── pom.xml                         # Maven Dependencies
+Secure-Note-Taking-Application/
+├── src/main/java/com/ziyad/securenotetakingapplication/
+│   ├── config/                     # Configuration classes
+│   │   ├── AppRole.java           # User roles enum
+│   │   ├── AppConstants.java      # Application constants
+│   │   └── SecurityConfig.java    # Spring Security configuration
+│   ├── controller/                # REST API Controllers
+│   │   ├── AuthController.java    # Authentication endpoints
+│   │   ├── NoteController.java    # Note management endpoints
+│   │   └── FolderController.java  # Folder management endpoints
+│   ├── model/                     # JPA Entity classes
+│   │   ├── User.java             # User entity
+│   │   ├── Note.java             # Note entity
+│   │   ├── Folder.java           # Folder entity
+│   │   └── Role.java             # Role entity
+│   ├── repository/               # JPA Repositories
+│   │   ├── UserRepository.java   
+│   │   ├── NoteRepository.java   
+│   │   ├── FolderRepository.java 
+│   │   └── RoleRepository.java   
+│   ├── service/                  # Business logic layer
+│   │   ├── NoteService.java      
+│   │   ├── FolderService.java    
+│   │   └── UserService.java      
+│   ├── security/                 # Security components
+│   │   ├── jwt/                  # JWT utilities
+│   │   ├── services/             # Security services
+│   │   ├── request/              # Request DTOs
+│   │   └── response/             # Response DTOs
+│   ├── payload/                  # Data Transfer Objects
+│   │   ├── NoteDTO.java          
+│   │   ├── FolderDTO.java        
+│   │   └── UserDTO.java          
+│   └── exceptions/               # Custom exceptions
+│
+├── secure-note-taking-application-frontend/
+│   ├── src/
+│   │   ├── components/           # React components
+│   │   │   ├── Auth/            # Authentication components
+│   │   │   ├── Folder/          # Folder management components
+│   │   │   ├── Note/            # Note management components
+│   │   │   ├── Navigation/      # Navigation components
+│   │   │   └── Routes/          # Route configuration
+│   │   ├── context/             # React Context providers
+│   │   │   └── AuthContext.js   # Authentication context
+│   │   ├── services/            # API service functions
+│   │   │   ├── authService.js   # Authentication API calls
+│   │   │   ├── noteService.js   # Note API calls
+│   │   │   └── folderService.js # Folder API calls
+│   │   ├── styles/              # Styling and themes
+│   │   │   ├── GlobalStyles.js  # Global CSS styles
+│   │   │   └── theme.js         # Theme configuration
+│   │   └── App.js               # Main application component
+│   ├── public/                  # Static assets
+│   └── package.json             # Dependencies and scripts
+│
+├── pom.xml                      # Maven configuration
 └── README.md
 ```
 
-## 🎯 Key Features & Usage
+## 🔧 API Endpoints
 
-### 1. **User Roles**
-- **Admin**: Full system access, manage all entities
-- **Citizen**: Submit pickup requests and complaints
-- **Employee**: Process requests and update schedules
+### Authentication Endpoints
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| POST | `/note/auth/login` | User login | Public |
+| POST | `/note/auth/signup` | User registration | Public |
+| POST | `/note/auth/logout` | User logout | Authenticated |
 
-### 2. **Pickup Request Management**
-- Create new pickup requests with quantity specifications
-- Select waste categories (Organic, Recyclable, Hazardous, etc.)
-- Track request status (Requested → Collected)
-- View all requests in organized lists
+### Folder Management
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| GET | `/note/folder/get` | Get all folders (paginated) | Authenticated |
+| GET | `/note/folder/{folderId}` | Get specific folder | Authenticated |
+| POST | `/note/folder/create` | Create new folder | Authenticated |
+| PUT | `/note/folder/update/{folderId}` | Update folder | Authenticated |
+| DELETE | `/note/folder/delete/{folderId}` | Delete folder | Authenticated |
 
-### 3. **Complaint System**
-- Submit detailed complaints about waste management issues
-- Track complaint status (Pending → Resolved)
-- Admin/Employee resolution workflow
+### Note Management
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| GET | `/note/{folderId}/notes` | Get notes in folder (paginated) | Authenticated |
+| GET | `/note/note/{noteId}` | Get specific note | Authenticated |
+| POST | `/note/{folderId}/note/create` | Create note in folder | Authenticated |
+| PUT | `/note/{folderId}/note/update/{noteId}` | Update note | Authenticated |
+| DELETE | `/note/{folderId}/note/delete/{noteId}` | Delete note | Authenticated |
 
-### 4. **Collection Scheduling**
-- Create area-based collection schedules
-- Date-wise planning and organization
-- Status tracking (Scheduled → Completed)
+## 🗃️ Database Schema
 
-### 5. **Recycling Centers**
-- Manage recycling facility locations
-- Contact information and details
-- Easy access for citizens
+### Users Table
+```sql
+CREATE TABLE users (
+    user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
 
-## 🔧 API Endpoints & Controllers
+### Folders Table
+```sql
+CREATE TABLE folders (
+    folder_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    folder_name VARCHAR(100) NOT NULL,
+    user_id BIGINT NOT NULL,
+    folder_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    folder_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    UNIQUE KEY unique_folder_per_user (folder_name, user_id)
+);
+```
 
-| Controller | Base Path | Description |
-|------------|-----------|-------------|
-| **DashboardController** | `/dashboard` | Main dashboard and statistics |
-| **ComplaintController** | `/complaints` | Complaint management |
-| **PickupRequestController** | `/requests` | Pickup request handling |
-| **RecyclingCenterController** | `/centers` | Recycling center management |
-| **CollectionScheduleController** | `/schedules` | Collection scheduling |
-| **WasteCategoryController** | `/categories` | Waste category management |
+### Notes Table
+```sql
+CREATE TABLE notes (
+    note_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    note_title VARCHAR(200) NOT NULL,
+    note_content MEDIUMTEXT NOT NULL,
+    folder_id BIGINT NOT NULL,
+    note_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    note_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (folder_id) REFERENCES folders(folder_id) ON DELETE CASCADE,
+    UNIQUE KEY unique_note_per_folder (note_title, folder_id)
+);
+```
 
-## 🗃️ Database Entities
+## 🔐 Security Features
 
-- **User**: System users with role-based access
-- **PickupRequest**: Waste collection requests
-- **Complaint**: User complaints and issues
-- **WasteCategory**: Classification of waste types
-- **CollectionSchedule**: Scheduled collection activities
-- **RecyclingCenter**: Recycling facility information
+### JWT Implementation
+- **Token Generation**: Secure JWT tokens with expiration
+- **Cookie Storage**: HTTP-only cookies for XSS protection
+- **Refresh Mechanism**: Automatic token refresh handling
+- **Blacklist Support**: Token invalidation on logout
 
-## 🔐 Authentication & Security
+### Role-Based Access Control
+```java
+public enum AppRole {
+    ROLE_ADMIN,    // Full system access
+    ROLE_EDITOR,   // Create, edit, delete notes
+    ROLE_VIEWER    // Read-only access
+}
+```
 
-- **Form-based authentication** with username/password
-- **Role-based access control** (RBAC)
-- **Session management** for user security
-- **Input validation** with Bean Validation
+### Security Headers
+- CSRF Protection
+- XSS Prevention
+- Content Security Policy
+- Secure Cookie Configuration
+
+## 🎨 Frontend Features
+
+### Styled Components Theme
+```javascript
+export const theme = {
+    colors: {
+        primary: '#0f172a',
+        secondary: '#1e293b',
+        accent: 'rgba(0, 255, 255, 0.05)',
+        background: 'rgba(30, 41, 59, 0.95)'
+    },
+    // ... more theme configuration
+};
+```
+
+### Authentication Context
+```javascript
+const AuthContext = createContext({
+    isAuthenticated: false,
+    login: async () => {},
+    logout: async () => {}
+});
+```
 
 ## 🧪 Testing
 
-Run the test suite:
+### Backend Testing
 ```bash
 mvn test
 ```
 
-## 🎨 Frontend Features
+### Frontend Testing
+```bash
+cd secure-note-taking-application-frontend
+npm test
+```
 
-- **Responsive Design**: Bootstrap 4 for mobile-friendly interface
-- **Form Validation**: Client and server-side validation
-- **Dynamic Content**: Thymeleaf templating for dynamic pages
-- **User-Friendly Navigation**: Intuitive dashboard and menu system
+## 📱 Mobile Responsiveness
+
+- **Responsive Design**: Optimized for mobile, tablet, and desktop
+- **Touch-Friendly**: Mobile-optimized interactions
+- **Progressive Web App**: PWA capabilities for mobile installation
 
 ## 🤝 Contributing
 
 1. Fork the project
-2. Create your feature branch (`git checkout -b feature/NewFeature`)
-3. Commit your changes (`git commit -m 'Add NewFeature'`)
-4. Push to the branch (`git push origin feature/NewFeature`)
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
 ## 🐛 Known Issues & Limitations
 
-- Results may be incomplete due to search limitations
-- For complete code exploration, visit: [GitHub Code Search](https://github.com/ziyadhussain23/Smart_Waste_Manangement_System/search?type=code)
+- Search results may be incomplete due to API limitations
+- For complete code exploration: [View on GitHub](https://github.com/ziyadhussain23/Secure-Note-Taking-Application/search?type=code)
 
 ## 📄 License
 
@@ -197,22 +346,45 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Ziyad Hussain**
 - GitHub: [@ziyadhussain23](https://github.com/ziyadhussain23)
+- Project Link: [Secure Note Taking Application](https://github.com/ziyadhussain23/Secure-Note-Taking-Application)
 
-## 🏗️ Architecture
+## 🙏 Acknowledgments
 
-This application follows the **MVC (Model-View-Controller)** pattern:
-- **Model**: JPA entities representing database tables
-- **View**: Thymeleaf templates for user interface
-- **Controller**: Spring Boot controllers handling HTTP requests
+- Spring Boot team for the excellent framework
+- React community for the amazing ecosystem
+- JWT.io for token specification
+- All contributors who helped improve this project
 
-## 🌱 Environmental Impact
+## 🚀 Deployment
 
-This system promotes environmental sustainability by:
-- Optimizing waste collection routes
-- Encouraging proper waste categorization
-- Facilitating recycling through center management
-- Reducing waste through efficient scheduling
+### Backend Deployment
+```bash
+# Build production JAR
+mvn clean package -DskipTests
+
+# Run production build
+java -jar target/secure-note-taking-application-0.0.1-SNAPSHOT.jar
+```
+
+### Frontend Deployment
+```bash
+# Build for production
+npm run build
+
+# Serve static files
+npx serve -s build
+```
+
+## ⚡ Performance Optimizations
+
+- **Pagination**: Efficient data loading for large datasets
+- **Lazy Loading**: Components loaded on demand
+- **Database Indexing**: Optimized queries for better performance
+- **Caching**: Strategic caching implementation
+- **Bundle Optimization**: Minimized JavaScript bundles
 
 ---
 
 *Last updated: May 30, 2025*
+
+**Note**: This application demonstrates modern full-stack development practices with emphasis on security, user experience, and maintainable code architecture.
