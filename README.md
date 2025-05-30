@@ -338,10 +338,6 @@ npm test
 - Search results may be incomplete due to API limitations
 - For complete code exploration: [View on GitHub](https://github.com/ziyadhussain23/Secure-Note-Taking-Application/search?type=code)
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 👨‍💻 Author
 
 **Ziyad Hussain**
